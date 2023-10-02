@@ -7,6 +7,7 @@ class Bass_class {
         this.axios = require("axios");
         this.fs = require("fs");
         this.path = require("path");
+        this.exec = require("child_process").exec;
     }
 
     _get(options) {
@@ -94,7 +95,7 @@ class Bass_class {
         }
     }
 
-    async mergeFile() {
+    generFileText() {
         let result = "";
         let fileList = this.fs
             .readdirSync("./download")
@@ -107,6 +108,11 @@ class Bass_class {
         });
         console.log(result);
         this.fs.writeFileSync("file.txt", result, "utf-8");
+    }
+
+    async mergeFile() {
+        this.generFileText();
+        this.exec("ffmpeg.exe -f concat -safe 0 -i file.txt -c copy output.mp4");
     }
 
     async start() {
